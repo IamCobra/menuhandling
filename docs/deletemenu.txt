@@ -1,0 +1,30 @@
+sequenceDiagram
+    title UC3 – Fjern menupunkt
+
+    participant Browser
+    participant Webserver
+    participant Database
+
+    Browser->>Webserver: GET /edit-menu
+    Webserver->>Database: SELECT * FROM menu
+    Database-->>Webserver: Menu liste
+    Webserver-->>Browser: HTML-side med "Fjern" knapper
+
+    note over Browser: Kokken klikker "Fjern" på et punkt
+
+    Browser->>Browser: Åbn <dialog> med bekræftelse
+    Browser->>Webserver: POST /menu/:id?_method=DELETE
+
+    Webserver->>Database: DELETE FROM menu WHERE id=?
+    alt Punkt findes ikke
+        Database-->>Webserver: 0 rækker slettet
+        Webserver->>Webserver: Returner HTML-side med fejl (punkt findes ikke)
+        Webserver-->>Browser: HTML med fejl
+    else Punkt findes
+        Database-->>Webserver: 1 række slettet
+        Webserver-->>Browser: Redirect 302 /edit-menu
+        Browser->>Webserver: GET /edit-menu
+        Webserver->>Database: SELECT * FROM menu
+        Database-->>Webserver: Ny liste
+        Webserver-->>Browser: Opdateret menu
+    end

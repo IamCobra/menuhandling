@@ -1,0 +1,30 @@
+sequenceDiagram
+    title UC2 – Rediger menupunkt
+
+    participant Browser
+    participant Webserver
+    participant Database
+
+    Browser->>Webserver: GET /edit-menu
+    Webserver->>Database: SELECT * FROM menu
+    Database-->>Webserver: Menu liste
+    Webserver-->>Browser: HTML-side med "Rediger" knapper
+
+    note over Browser: Kokken klikker "Rediger" på et punkt
+
+    Browser->>Browser: Åbn <dialog> med forudfyldt formular
+
+    Browser->>Webserver: POST /menu/:id?_method=PUT (navn, pris)
+    Webserver->>Webserver: Valider input
+    alt Ugyldigt input
+        Webserver->>Webserver: Returner HTML-side med fejl og <dialog> åbent
+        Webserver-->>Browser: HTML med fejl
+    else Gyldigt input
+        Webserver->>Database: UPDATE menu SET navn=?, pris=? WHERE id=?
+        Database-->>Webserver: OK
+        Webserver-->>Browser: Redirect 302 /edit-menu
+        Browser->>Webserver: GET /edit-menu
+        Webserver->>Database: SELECT * FROM menu
+        Database-->>Webserver: Ny liste
+        Webserver-->>Browser: Opdateret menu
+    end

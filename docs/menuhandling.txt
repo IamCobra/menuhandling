@@ -1,0 +1,20 @@
+title: UC1 – Tilføj menupunkt
+Browser | Webserver | Database
+
+Browser->Webserver: GET /edit-menu
+Webserver->Database: Hent alle menupunkter
+Database-->Webserver: Liste over menupunkter
+Webserver-->Browser: HTML-side med liste
+
+Browser->Browser: Kokken trykker "Tilføj ny ret"\nÅbn <dialog> med formular
+Browser->Webserver: POST /menu {navn, pris}
+
+Webserver->Webserver: Valider input
+alt Navn mangler
+    Webserver->Webserver: Generér fejlbesked
+    Webserver-->Browser: HTML-side med <dialog> og fejl
+else Input gyldigt
+    Webserver->Database: INSERT nyt menupunkt
+    Database-->Webserver: Bekræftelse
+    Webserver-->Browser: 302 Redirect til /edit-menu
+end
