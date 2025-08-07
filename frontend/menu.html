@@ -16,16 +16,22 @@
         <ul>
           <li>
             Spaghetti Bolognese - $12
+            <form action="/edit-menu" method="get" style="display: inline">
+              <button type="submit">Edit</button>
+            </form>
             <form action="/menu/delete" method="post" style="display: inline">
               <input type="hidden" name="dish" value="Spaghetti Bolognese" />
-              <button type="submit">Slet</button>
+              <button type="submit">Delete</button>
             </form>
           </li>
           <li>
             Caesar Salad - $9
+            <form action="/edit-menu" method="get" style="display: inline">
+              <button type="submit">Edit</button>
+            </form>
             <form action="/menu/delete" method="post" style="display: inline">
               <input type="hidden" name="dish" value="Caesar Salad" />
-              <button type="submit">Slet</button>
+              <button type="submit">Delete</button>
             </form>
           </li>
         </ul>
@@ -45,7 +51,6 @@
         </dialog>
       </section>
     </main>
-    <script src="index.js"></script>
     <script>
       const dialog = document.getElementById("add-dish-dialog");
       document.getElementById("open-dialog").onclick = () => dialog.showModal();
